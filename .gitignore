@@ -1,0 +1,4 @@
+alpine-minirootfs*
+bzImage
+vmlinux.bin
+initramfs.img.lz4

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+qemu-system-x86_64 \
+   -M microvm,pit=off,pic=off,rtc=off \
+   -enable-kvm -cpu host -m 512m -smp 2 \
+   -kernel ./bzImage -initrd ./initramfs.img.lz4 \
+   -append "console=ttyS0 reboot=t quiet TEST_STRING=1234" \
+   -nodefaults -no-user-config -nographic \
+   -device vhost-vsock-device,guest-cid=3 \
+   -serial stdio
+
+
+
+#qemu-system-x86_64 \
+#   -M microvm,x-option-roms=off,pit=off,pic=off,isa-serial=off,rtc=off \
+#   -enable-kvm -cpu host -m 512m -smp 2 \
+#   -kernel ~/src/kernel/linux-git/arch/x86/boot/bzImage -initrd initramfs.img.lz4 \
+#   -append "earlyprintk=ttyS0 console=hvc0 reboot=t" \
+#   -nodefaults -no-user-config -nographic \
+#   -chardev stdio,id=virtiocon0 \
+#   -device virtio-serial-device \
+#   -device virtconsole,chardev=virtiocon0
