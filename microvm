@@ -1,12 +1,15 @@
 #!/bin/sh
 
 qemu-system-x86_64 \
+   -no-reboot \
    -M microvm,pit=off,pic=off,rtc=off \
    -enable-kvm -cpu host -m 512m -smp 2 \
    -kernel ./bzImage -initrd ./initramfs.img.lz4 \
-   -append "console=ttyS0 reboot=t quiet TEST_STRING=1234" \
+   -append "console=ttyS0 reboot=t quiet" \
    -nodefaults -no-user-config -nographic \
    -device vhost-vsock-device,guest-cid=3 \
+   -object rng-random,filename=/dev/urandom,id=rng0 \
+   -device virtio-rng-device,rng=rng0 \
    -serial stdio
 
 
