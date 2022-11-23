@@ -1,9 +1,9 @@
 #! /bin/bash
 
-set -eE
+set -eEuo pipefail
 
 ARCH=x86_64
-VER=3.15.1
+VER=3.17.0
 MAJOR=v${VER%.*}
 TAR=alpine-minirootfs-${VER}-${ARCH}.tar.gz
 URL=https://dl-cdn.alpinelinux.org/alpine/${MAJOR}/releases/${ARCH}/${TAR}
@@ -14,7 +14,7 @@ WORK_DIR=`mktemp -d`
 tar xf ${TAR} -C $WORK_DIR
 
 # setup the rootfs
-sudo systemd-nspawn -D $WORK_DIR /sbin/apk add python3 --update-cache
+sudo systemd-nspawn --quiet -D $WORK_DIR /sbin/apk add python3 --update-cache
 cp ./init ./vsock-demo.py $WORK_DIR
 
 # make the initramfs
