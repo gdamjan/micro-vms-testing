@@ -7,12 +7,13 @@
 #
 
 trap 'exit 1' INT HUP QUIT TERM ALRM USR1
-trap 'poweroff' EXIT
+trap 'force_poweroff' EXIT
 
-### Firecracker does not exit the host program on `poweroff`, just on reboot.
-### Cloud-hypervisor is the opposite (on reboot, it does a soft-restart of the guest)
-poweroff() {
-    if grep -q cloud-hypervisor /sys/firmware/dmi/entries/0-0/raw; then
+### Firecracker does not exit the host hypervisor on `poweroff`, so we need to run `reboot`.
+### Cloud-hypervisor is the opposite, `poweroff` stops the hypervisor, `reboot` soft-restarts the guest.
+### QEMU/microvm either works
+force_poweroff() {
+    if [ -e /sys/firmware/dmi/entries/0-0/raw ] && grep -q cloud-hypervisor /sys/firmware/dmi/entries/0-0/raw; then
       poweroff -f
     else
       reboot -f
