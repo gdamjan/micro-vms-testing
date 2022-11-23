@@ -64,7 +64,7 @@ if [ -n "$shared_dir" ]; then
 fi
 
 set -x
-./cloud-hypervisor ${HYP_ARGS[@]} --cmdline "${CMDLINE[*]}"
+cloud-hypervisor ${HYP_ARGS[@]} --cmdline "${CMDLINE[*]}"
 set +x
 
 ## Guest commands:
