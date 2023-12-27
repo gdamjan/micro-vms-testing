@@ -21,15 +21,14 @@ force_poweroff() {
 }
 
 mount -t devtmpfs dev /dev
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
 
 ### Early exit - used to test how fast a VM gets to this point
 if [ -n "$TEST_STRING" ]; then
     echo $TEST_STRING > /dev/console
     exit
 fi
-
-mount -t proc proc /proc
-mount -t sysfs sysfs /sys
 
 ip link set up dev lo
 
