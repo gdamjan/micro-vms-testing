@@ -3,7 +3,7 @@
 set -eEuo pipefail
 
 ARCH=x86_64
-VER=3.17.0
+VER=3.19.0
 MAJOR=v${VER%.*}
 TAR=alpine-minirootfs-${VER}-${ARCH}.tar.gz
 URL=https://dl-cdn.alpinelinux.org/alpine/${MAJOR}/releases/${ARCH}/${TAR}
