@@ -1,26 +1,9 @@
 #! /bin/bash
 
-set -eEuo pipefail
+podman build -t initramfs.img .
+CTR_ID=`podman create initramfs.img`
 
-ARCH=x86_64
-VER=3.20.3
-MAJOR=v${VER%.*}
-TAR=alpine-minirootfs-${VER}-${ARCH}.tar.gz
-URL=https://dl-cdn.alpinelinux.org/alpine/${MAJOR}/releases/${ARCH}/${TAR}
+podman export $CTR_ID | bsdtar -cf - --format newc @- | lz4c -l > run/initramfs.img.lz4
 
-curl -Os -C- $URL
-
-WORK_DIR=`mktemp -d`
-tar xf ${TAR} -C $WORK_DIR
-
-# setup the rootfs
-sudo systemd-nspawn --quiet -D $WORK_DIR /sbin/apk add python3 --update-cache
-cp ./init ./vsock-demo.py $WORK_DIR
-
-# make the initramfs
-(
-    find $WORK_DIR -printf "%P\0" |
-    cpio --directory=$WORK_DIR --null --create --verbose --owner root:root --format=newc ) |
-    lz4c -l > initramfs.img.lz4
-
-sudo rm -rf "$WORK_DIR"
+podman rm $CTR_ID
+#podman rmi initramfs.img

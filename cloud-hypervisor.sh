@@ -2,8 +2,8 @@
 set -eu
 
 
-INITRAMFS=./initramfs.img.lz4
-KERNEL=./vmlinux.bin
+INITRAMFS=./run/initramfs.img.lz4
+KERNEL=./run/vmlinux.bin
 CMDLINE=(reboot=k panic=1 i8042.noaux i8042.nomux i8042.nopnp i8042.dumbkbd)
 
 HYP_ARGS=(
@@ -11,6 +11,7 @@ HYP_ARGS=(
     --cpus boot=2
     --kernel "$KERNEL"
     --initramfs "$INITRAMFS"
+    # --net "tap=,mac=,ip=,mask="
 )
 
 verbose=false
@@ -48,19 +49,17 @@ if [ -n "$shared_dir" ]; then
     VIRTIOFS_NAME=myfs
     VIRTIOFS_SOCK=`mktemp -d`/$VIRTIOFS_NAME.virtiofs
     VIRTIOFS_SHARED=/tmp/$VIRTIOFS_NAME.shared_dir
-    HYP_ARGS=(
-        --memory "size=512M,file=/dev/shm"
-        --fs "tag=$VIRTIOFS_NAME,sock=$VIRTIOFS_SOCK,num_queues=1,queue_size=512"
+    HYP_ARGS+=(
+        --memory "size=512M,shared=on"
+        --fs "tag=$VIRTIOFS_NAME,socket=$VIRTIOFS_SOCK,num_queues=1,queue_size=512"
     )
 
-    #virtiofsd -f \
-    #    --socket-path="$VIRTIOFS_SOCK" \
-    #    -o source="$VIRTIOFS_SHARED" \
-    #    -o cache=none
+    /usr/lib/virtiofsd \
+        --tag="$VIRTIOFS_NAME" \
+        --socket-path="$VIRTIOFS_SOCK" \
+        --shared-dir="$shared_dir" \
+        --cache=never &
 
-    vhost_user_fs \
-        --sock "$VIRTIOFS_SOCK" \
-        --shared-dir "$shared_dir"
 fi
 
 set -x

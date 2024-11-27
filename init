@@ -32,6 +32,12 @@ fi
 
 ip link set up dev lo
 
-# mount -t virtiofs myfs /mnt
+for tagfile in /sys/fs/virtiofs/*/tag; do
+  if [[ $tagfile == '*' ]]; then break; fi
+
+  tag=`cat $tagfile`
+  mkdir "/mnt/$tag"
+  mount -t virtiofs "$tag" "/mnt/$tag"
+done
 
 /sbin/getty -n -l /bin/sh 115200 /dev/console
