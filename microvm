@@ -1,17 +1,23 @@
 #!/bin/sh
 
 qemu-system-x86_64 \
+   -M microvm \
    -no-reboot \
-   -M microvm,pit=off,pic=off,rtc=off \
    -enable-kvm -cpu host -m 512m -smp 2 \
-   -kernel ./bzImage -initrd ./initramfs.img.lz4 \
+   -kernel ./run/bzImage -initrd ./run/initramfs.img.lz4 \
    -append "console=ttyS0 reboot=t quiet" \
    -nodefaults -no-user-config -nographic \
-   -device vhost-vsock-device,guest-cid=3 \
    -object rng-random,filename=/dev/urandom,id=rng0 \
-   -device virtio-rng-device,rng=rng0 \
-   -serial stdio
+   -serial stdio \
+   -device vhost-vsock-device,guest-cid=3
 
+
+   #-device vhost-vsock-device,guest-cid=3
+#   -netdev user,id=mynet0,hostfwd=tcp::10022-:22,hostfwd=tcp::12375-:2375 \
+#   -device virtio-net-pci,netdev=mynet0
+
+   #-M microvm,pit=off,pic=off,rtc=off \
+   #-device virtio-rng-device,rng=rng0 \
 
 
 #qemu-system-x86_64 \

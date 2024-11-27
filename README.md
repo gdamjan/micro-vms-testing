@@ -18,6 +18,7 @@ cloud-hypervisor --seccomp=false --cpus boot=2 \
 * Build a kernel with the `linux-config` config for a minimal no-legacy kernel
   (no modules either). You'll need the `arch/x86/boot/compressed/vmlinux.bin` for
   firecracker and cloud-hypervisor, `arch/x86/boot/bzImage` for QEMU microvm.
+  Put those in the `./run/` directory.
 * `build-initramfs.sh` will create an initramfs based on alpine, with python
   installed and a custom /init script.
 * `cloud-hypervisor.sh` will run cloud-hypervisor with some shortcuts
