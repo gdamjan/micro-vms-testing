@@ -3,12 +3,12 @@
 set -eEuo pipefail
 
 ARCH=x86_64
-VER=3.19.0
+VER=3.20.3
 MAJOR=v${VER%.*}
 TAR=alpine-minirootfs-${VER}-${ARCH}.tar.gz
 URL=https://dl-cdn.alpinelinux.org/alpine/${MAJOR}/releases/${ARCH}/${TAR}
 
-wget -c $URL
+curl -Os -C- $URL
 
 WORK_DIR=`mktemp -d`
 tar xf ${TAR} -C $WORK_DIR
