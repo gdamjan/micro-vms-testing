@@ -18,13 +18,14 @@ verbose=false
 shared_dir=""
 vsock_cid=""
 test_string=""
-while getopts vd:s:t: flag
+while getopts ":vd:s:t:" flag
 do
     case "${flag}" in
         v) verbose=true;;
         d) shared_dir=${OPTARG};;
         s) vsock_cid=${OPTARG};;
         t) test_string=${OPTARG};;
+        *) echo>&2 "Invalid Option: '-${OPTARG}'"; exit 1 ;;
     esac
 done
 
