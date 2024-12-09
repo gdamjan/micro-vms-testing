@@ -20,9 +20,12 @@ force_poweroff() {
     fi
 }
 
-mount -t devtmpfs dev /dev
+# API_FILE_SYSTEMS
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
+mount -t devtmpfs dev /dev
+mkdir -p /dev/pts
+mount -t devpts devpts /dev/pts -o rw,nosuid,noexec,gid=5,mode=620
 
 ### Early exit - used to test how fast a VM gets to this point
 if [ -n "$TEST_STRING" ]; then
