@@ -24,6 +24,19 @@ cloud-hypervisor --seccomp=false --cpus boot=2 \
 * `cloud-hypervisor.sh` will run cloud-hypervisor with some shortcuts
 * `microvm` will run qemu with some shortcuts
 
+
+## Remote shell over vsock for testing
+
+On the guest, run:
+```
+socat VSOCK-LISTEN:2000,reuseaddr,fork exec:/bin/sh,pty,stderr,setsid,sigint,sane
+```
+
+On the host:
+```
+socat STDIO UNIX-CONNECT:/tmp/vsock-10.sock
+```
+
 ## References
 - https://www.cloudhypervisor.org/
 - https://firecracker-microvm.github.io/
