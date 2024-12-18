@@ -1,7 +1,7 @@
 {
   "boot-source": {
-    "kernel_image_path": "vmlinux.bin",
-    "initrd_path": "initramfs.img.lz4",
+    "kernel_image_path": "run/vmlinux.bin",
+    "initrd_path": "run/initramfs.img.lz4",
     "boot_args": "keep_bootcon console=ttyS0 reboot=t panic=1 pci=off i8042.noaux i8042.nomux i8042.nopnp i8042.dumbkbd"
   },
   "drives": [],
